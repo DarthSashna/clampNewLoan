@@ -17,12 +17,7 @@ namespace OpenLoco::GameCommands
         const auto maxLoan = Economy::getInflationAdjustedCost(CompanyManager::getMaxLoanSize(), 0, 8) / 100 * 100;
         auto* company = CompanyManager::get(GameCommands::getUpdatingCompanyId());
 
-        // Old saves may have a negative loan as per #3836; allow gradual increases, but not decreases.
-        const currency32_t clampLow = std::min<currency32_t>(company->currentLoan, 0);
-        // Sandbox mode can be used to decrease `maxLoan` such that `company->maxLoan > maxLoan`. Don't clamp the loan downwards
-        // in such cases as that masks the error and betrays the owner's intention.
-        const currency32_t clampHigh = std::max<currency32_t>(company->currentLoan, maxLoan);
-        const currency32_t clampedNewLoan = std::clamp<currency32_t>(newLoan, clampLow, clampHigh);
+        const currency32_t clampedNewLoan = std::clamp<currency32_t>(newLoan, 0, maxLoan);
         const currency32_t loanDifference = company->currentLoan - clampedNewLoan;
 
         if (company->currentLoan > clampedNewLoan)

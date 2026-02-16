@@ -14,7 +14,7 @@ namespace OpenLoco::GameCommands
     {
         GameCommands::setExpenditureType(ExpenditureType::LoanInterest);
 
-        const auto maxLoan = Economy::getInflationAdjustedCost(CompanyManager::getMaxLoanSize(), 0, 8);
+        const auto maxLoan = Economy::getInflationAdjustedCost(CompanyManager::getMaxLoanSize(), 0, 8) / 100 * 100;
         auto* company = CompanyManager::get(GameCommands::getUpdatingCompanyId());
 
         // Old saves may have a negative loan as per #3836; allow gradual increases, but not decreases.
